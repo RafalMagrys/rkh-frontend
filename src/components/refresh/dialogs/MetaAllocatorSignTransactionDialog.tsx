@@ -104,7 +104,7 @@ const MetaAllocatorSignTransactionDialog = ({
   });
 
   const onMetaAllocatorSubmit = useCallback(
-    async ({ dataCap }: ChangeDatacapFormValues) => {
+    async ({ dataCap, method }: ChangeDatacapFormValues) => {
       if (Number(dataCap) === 0) {
         setStep(MetaAllocatorSignSteps.REJECTION_CONFIRMATION);
       } else {
@@ -112,6 +112,7 @@ const MetaAllocatorSignTransactionDialog = ({
           address,
           datacap: dataCap,
           metaAllocatorContractAddress: maAddress,
+          method,
         });
       }
     },

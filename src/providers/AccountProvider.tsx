@@ -382,8 +382,7 @@ export const AccountProvider: React.FC<{
         env.useTestnet,
       );
 
-      const head = await (api as any).client.chainHead()
-      const datacap = await (api as any).client.stateVerifierStatus(actorId, head.Cids)
+      const datacap = await (api as any).client.stateVerifierStatus(actorId, null)
       const datacapInPiB = BigInt(datacap.toString()) / BigInt(1_125_899_906_842_624);
 
       return {

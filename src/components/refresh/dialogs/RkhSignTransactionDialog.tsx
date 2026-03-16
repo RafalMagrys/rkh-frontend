@@ -12,14 +12,13 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import { RefreshAllocatorSuccessStep } from '@/components/refresh/steps';
 import { RefreshAllocatorSteps } from '@/components/refresh/steps/constants';
-import { useProposeRKHTransaction, useStateWaitMsg } from '@/hooks';
+import { useProposeRKHTransaction, useStateWaitMsg, useGetVerifierDataCap } from '@/hooks';
 import { MetapathwayType } from '@/types/refresh';
 import {
   ChangeDatacapFormStep,
   ChangeDatacapFormValues,
 } from '@/components/refresh/steps/ChangeDatacapFormStep';
 import { withFormProvider } from '@/lib/hocs/withFormProvider';
-import { useGetVerifierDataCap } from '@/hooks/useGetVerifierDataCap';
 
 interface RkhSignTransactionDialogProps {
   open: boolean;
@@ -71,7 +70,7 @@ const RkhSignTransactionDialog = ({
 
   const onSubmit = useCallback(
     async ({ dataCap, method }: ChangeDatacapFormValues) => {
-      const datacapForSubmit = method === 'add' ? dataCap + (verifierData?.datacap || 0) : dataCap;
+      const datacapForSubmit = method === 'add' ? Number(dataCap) + Number(verifierData?.datacap || 0) : Number(dataCap);
       proposeTransaction({ address, datacap: datacapForSubmit }).catch(error => {
         console.error('Error proposing verifier:', error);
       })

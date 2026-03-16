@@ -127,11 +127,29 @@ describe('MetaAllocatorSignTransactionDialog Integration Tests', () => {
       });
     });
 
-    it('should go through complete success flow', async () => {
+    it('should go through complete success flow and addAllowance', async () => {
       const user = userEvent.setup();
       render(<MetaAllocatorSignTransactionDialog {...mockProps} />, { wrapper });
 
       await user.type(screen.getByRole('spinbutton', { name: /datacap/i }), '1000');
+      await user.click(screen.getByRole('button', { name: /approve/i }));
+
+      const successHeader = await screen.findByTestId('success-header');
+      expect(successHeader).toHaveTextContent('Success!');
+
+      const transactionIdSection = screen.getByTestId('transaction-id-section');
+      expect(transactionIdSection).toHaveTextContent('Transaction ID0xabcdef123456789');
+
+      const blockNumberSection = screen.getByTestId('block-number-section');
+      expect(blockNumberSection).toHaveTextContent('Block number123');
+    });
+
+    it('should go through complete success flow and setAllowance', async () => {
+      const user = userEvent.setup();
+      render(<MetaAllocatorSignTransactionDialog {...mockProps} />, { wrapper });
+
+      await user.type(screen.getByRole('spinbutton', { name: /datacap/i }), '1000');
+      await user.click(screen.getByRole('radio', {name: /set/i}));
       await user.click(screen.getByRole('button', { name: /approve/i }));
 
       const successHeader = await screen.findByTestId('success-header');

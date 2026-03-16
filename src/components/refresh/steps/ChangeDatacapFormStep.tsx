@@ -1,5 +1,5 @@
 import { useFormContext, useWatch } from 'react-hook-form';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 import { ControlledFormItem } from '@/components/ui/form-item';
 import { Input } from '@/components/ui/input';
@@ -67,8 +67,8 @@ export const ChangeDatacapFormStep = ({
           <span>{verifierDataCap} PiB</span>
         </div> : null}
 
-        <ControlledFormItem className="w-full" name="method" label="Method" control={control}>
-          <Switcher className="w-full" defaultValue="add" options={methodOptions} />
+        <ControlledFormItem className="w-full" name="method" defaultValue="add" label="Method" control={control}>
+          <Switcher className="w-full" options={methodOptions} />
         </ControlledFormItem>
 
         <ControlledFormItem
