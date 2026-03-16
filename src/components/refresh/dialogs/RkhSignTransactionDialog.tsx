@@ -15,15 +15,17 @@ import { RefreshAllocatorSteps } from '@/components/refresh/steps/constants';
 import { useProposeRKHTransaction, useStateWaitMsg } from '@/hooks';
 import { MetapathwayType } from '@/types/refresh';
 import {
-  SetDatacapFormStep,
-  SetDatacapFormValues,
-} from '@/components/refresh/steps/SetDatacapFormStep';
+  ChangeDatacapFormStep,
+  ChangeDatacapFormValues,
+} from '@/components/refresh/steps/ChangeDatacapFormStep';
 import { withFormProvider } from '@/lib/hocs/withFormProvider';
+import { useGetVerifierDataCap } from '@/hooks/useGetVerifierDataCap';
 
 interface RkhSignTransactionDialogProps {
   open: boolean;
   address: string;
   dataCap?: number;
+  actorId: string;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -32,6 +34,7 @@ const RkhSignTransactionDialog = ({
   open,
   address,
   dataCap,
+  actorId,
 }: RkhSignTransactionDialogProps) => {
   const [step, setStep] = useState(RefreshAllocatorSteps.FORM);
   const [loadingMessage, setLoadingMessage] = useState<string | null>(null);
@@ -62,12 +65,18 @@ const RkhSignTransactionDialog = ({
     onProposeTransactionSuccess: (messageId: string) => checkTransactionState(messageId),
   });
 
+  const { data: verifierData } = useGetVerifierDataCap(actorId, {
+    enabled: !!actorId && open,
+  });
+
   const onSubmit = useCallback(
-    async ({ dataCap }: SetDatacapFormValues) =>
-      proposeTransaction({ address, datacap: dataCap }).catch(error => {
+    async ({ dataCap, method }: ChangeDatacapFormValues) => {
+      const datacapForSubmit = method === 'add' ? dataCap + (verifierData?.datacap || 0) : dataCap;
+      proposeTransaction({ address, datacap: datacapForSubmit }).catch(error => {
         console.error('Error proposing verifier:', error);
-      }),
-    [address, proposeTransaction],
+      })
+    },
+    [address, proposeTransaction, verifierData?.datacap],
   );
 
   const getBlockNumber = () => {
@@ -76,8 +85,9 @@ const RkhSignTransactionDialog = ({
 
   const stepsConfig = {
     [RefreshAllocatorSteps.FORM]: (
-      <SetDatacapFormStep
+      <ChangeDatacapFormStep
         metapathwayType={MetapathwayType.RKH}
+        verifierDataCap={verifierData?.datacap || 0}
         dataCap={dataCap}
         toAddress={address}
         onSubmit={onSubmit}

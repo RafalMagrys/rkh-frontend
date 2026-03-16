@@ -23,6 +23,9 @@ export interface AccountContextType {
     fromAccount: string,
     transactionId: number,
   ) => Promise<string>;
+
+  // Verifier
+  checkActorDataCap: (actorId: string) => Promise<{ datacap: number; verifier: string }>;
 }
 
 export const AccountContext = createContext<AccountContextType | undefined>(undefined);

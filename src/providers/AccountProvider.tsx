@@ -368,6 +368,32 @@ export const AccountProvider: React.FC<{
     [account, currentConnector],
   );
 
+  const checkActorDataCap = useCallback(
+    async (actorId: string) => {
+      if (!account?.wallet) {
+        throw new Error('Wallet not connected');
+      }
+
+      const api = new VerifyAPI(
+        VerifyAPI.browserProvider(env.rpcUrl, {
+          token: async () => 'dummy-token',
+        }),
+        account.wallet,
+        env.useTestnet,
+      );
+
+      const head = await (api as any).client.chainHead()
+      const datacap = await (api as any).client.stateVerifierStatus(actorId, head.Cids)
+      const datacapInPiB = BigInt(datacap.toString()) / BigInt(1_125_899_906_842_624);
+
+      return {
+        datacap: Number(datacapInPiB),
+        verifier: actorId,
+      }
+    },
+    [account],
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <AccountContext.Provider
@@ -381,6 +407,7 @@ export const AccountProvider: React.FC<{
           acceptVerifierProposal,
           loadPersistedAccount,
           selectedMetaAllocator,
+          checkActorDataCap,
         }}
       >
         {children}
