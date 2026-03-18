@@ -49,7 +49,7 @@ const Switcher = React.forwardRef<HTMLDivElement, SwitcherProps>(
         id={id}
         value={value}
         onValueChange={val => {
-          if (val) onChange?.(val as never);
+          if (val) onChange?.(val);
         }}
         onBlur={onBlur}
         disabled={disabled}
