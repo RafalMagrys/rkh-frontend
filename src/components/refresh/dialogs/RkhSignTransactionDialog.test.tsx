@@ -122,7 +122,7 @@ describe('RkhSignTransactionDialog Integration Tests', () => {
       render(<RkhSignTransactionDialog {...mockProps} />, { wrapper });
 
       await user.type(screen.getByRole('spinbutton', { name: /datacap/i }), '1000');
-      await user.click(screen.getByRole('radio', {name: /set/i}));
+      await user.click(screen.getByRole('radio', { name: /set/i }));
       await user.click(screen.getByRole('button', { name: /approve/i }));
 
       expect(mocks.mockProposeAddVerifier).toHaveBeenCalledWith(mockProps.address, 1000);

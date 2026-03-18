@@ -62,12 +62,20 @@ export const ChangeDatacapFormStep = ({
           <MetapathwayTypeBadge metapathwayType={metapathwayType} />
         </div>
 
-        {verifierDataCap ? <div data-testid="allocator-type" className="flex flex-row justify-between mb-2">
-          <Label>Allocator Datacap:</Label>
-          <span>{verifierDataCap} PiB</span>
-        </div> : null}
+        {verifierDataCap ? (
+          <div data-testid="allocator-type" className="flex flex-row justify-between mb-2">
+            <Label>Allocator Datacap:</Label>
+            <span>{verifierDataCap} PiB</span>
+          </div>
+        ) : null}
 
-        <ControlledFormItem className="w-full" name="method" defaultValue="add" label="Method" control={control}>
+        <ControlledFormItem
+          className="w-full"
+          name="method"
+          defaultValue="add"
+          label="Method"
+          control={control}
+        >
           <Switcher className="w-full" options={methodOptions} />
         </ControlledFormItem>
 

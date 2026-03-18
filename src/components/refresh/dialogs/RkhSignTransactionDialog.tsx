@@ -70,10 +70,11 @@ const RkhSignTransactionDialog = ({
 
   const onSubmit = useCallback(
     async ({ dataCap, method }: ChangeDatacapFormValues) => {
-      const datacapForSubmit = method === 'add' ? Number(dataCap) + Number(verifierData?.datacap || 0) : Number(dataCap);
+      const datacapForSubmit =
+        method === 'add' ? Number(dataCap) + Number(verifierData?.datacap || 0) : Number(dataCap);
       proposeTransaction({ address, datacap: datacapForSubmit }).catch(error => {
         console.error('Error proposing verifier:', error);
-      })
+      });
     },
     [address, proposeTransaction, verifierData?.datacap],
   );

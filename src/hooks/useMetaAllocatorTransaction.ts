@@ -156,7 +156,12 @@ export const useMetaAllocatorTransaction = ({
   }, []);
 
   const submitSafeTransaction = useCallback(
-    async ({ address, datacap, metaAllocatorContractAddress, method }: SubmitSafeTransactionParams) => {
+    async ({
+      address,
+      datacap,
+      metaAllocatorContractAddress,
+      method,
+    }: SubmitSafeTransactionParams) => {
       setIsPending(true);
       onSubmitSafeTransaction?.();
 

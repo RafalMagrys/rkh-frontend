@@ -43,7 +43,7 @@ const environments: { [key: string]: Environment } = {
     rpcUrl: 'http://localhost:3001/api/v1/rpc',
     metaAllocatorContractAddress: '0xB6F5d279AEad97dFA45209F3E53969c2EF43C21d',
     githubOwner: 'filecoin-project',
-    safeAddress: '0x7bba994c3492f60437b3c5ff0d5ca36c3060f9ad',
+    safeAddress: '0xa6d01c6e053170cff6de826116949d0a315aae80',
   },
   staging: {
     apiBaseUrl: 'https://allocator-rkh-testenv-8dphx.ondigitalocean.app/backend/api/v1',

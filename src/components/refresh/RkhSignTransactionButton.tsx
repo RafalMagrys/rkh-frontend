@@ -8,7 +8,11 @@ interface RkhSignTransactionButtonProps {
   dataCap: number;
 }
 
-export function RkhSignTransactionButton({ address, actorId, dataCap }: RkhSignTransactionButtonProps) {
+export function RkhSignTransactionButton({
+  address,
+  actorId,
+  dataCap,
+}: RkhSignTransactionButtonProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
