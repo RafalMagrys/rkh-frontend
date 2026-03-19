@@ -9,7 +9,7 @@ import {
   DialogLoadingCard,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshAllocatorSuccessStep } from '@/components/refresh/steps';
 import { RefreshAllocatorSteps } from '@/components/refresh/steps/constants';
 import { useProposeRKHTransaction, useStateWaitMsg, useGetVerifierDataCap } from '@/hooks';
@@ -68,15 +68,34 @@ const RkhSignTransactionDialog = ({
     enabled: !!actorId && open,
   });
 
+  const datacapInPib = useMemo(() => {
+    if (!verifierData?.datacap) return '0';
+    return (Number(verifierData?.datacap) / 1_125_899_906_842_624).toFixed(2);
+  }, [verifierData?.datacap]);
+
   const onSubmit = useCallback(
     async ({ dataCap, method }: ChangeDatacapFormValues) => {
-      const datacapForSubmit =
-        method === 'add' ? Number(dataCap) + Number(verifierData?.datacap || 0) : Number(dataCap);
-      proposeTransaction({ address, datacap: datacapForSubmit }).catch(error => {
-        console.error('Error proposing verifier:', error);
-      });
+      if (method === 'add') {
+        if (verifierData === undefined) {
+          setStep(RefreshAllocatorSteps.ERROR);
+          setErrorMessage('Verifier data not found');
+          return;
+        }
+
+        proposeTransaction({
+          address,
+          datacap: dataCap,
+          additionalDataCap: verifierData?.datacap,
+        }).catch(error => {
+          console.error('Error proposing verifier:', error);
+        });
+      } else {
+        proposeTransaction({ address, datacap: dataCap }).catch(error => {
+          console.error('Error proposing verifier:', error);
+        });
+      }
     },
-    [address, proposeTransaction, verifierData?.datacap],
+    [address, proposeTransaction, verifierData],
   );
 
   const getBlockNumber = () => {
@@ -87,7 +106,7 @@ const RkhSignTransactionDialog = ({
     [RefreshAllocatorSteps.FORM]: (
       <ChangeDatacapFormStep
         metapathwayType={MetapathwayType.RKH}
-        verifierDataCap={verifierData?.datacap || 0}
+        verifierDataCap={datacapInPib}
         dataCap={dataCap}
         toAddress={address}
         onSubmit={onSubmit}

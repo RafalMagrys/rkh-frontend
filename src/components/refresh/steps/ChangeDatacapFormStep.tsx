@@ -19,7 +19,7 @@ export interface ChangeDatacapFormValues {
 interface ChangeDatacapFormStepProps {
   rejectable?: boolean;
   metapathwayType: MetapathwayType;
-  verifierDataCap?: number;
+  verifierDataCap?: string;
   dataCap?: number;
   toAddress?: string;
   onSubmit: (data: ChangeDatacapFormValues) => void;

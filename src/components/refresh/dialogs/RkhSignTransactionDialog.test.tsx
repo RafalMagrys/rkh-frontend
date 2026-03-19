@@ -59,6 +59,8 @@ describe('RkhSignTransactionDialog Integration Tests', () => {
     success: true,
   };
 
+  const mockDataCap = 10n ** 18n;
+
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -71,7 +73,7 @@ describe('RkhSignTransactionDialog Integration Tests', () => {
     });
 
     mocks.mockUseGetVerifierDataCap.mockReturnValue({
-      data: { datacap: 1000 },
+      data: { datacap: mockDataCap, verifier: 'f012345' },
       isLoading: false,
       isError: false,
       error: null,
@@ -105,7 +107,11 @@ describe('RkhSignTransactionDialog Integration Tests', () => {
       await user.type(screen.getByRole('spinbutton', { name: /datacap/i }), '1000');
       await user.click(screen.getByRole('button', { name: /approve/i }));
 
-      expect(mocks.mockProposeAddVerifier).toHaveBeenCalledWith(mockProps.address, 2000);
+      expect(mocks.mockProposeAddVerifier).toHaveBeenCalledWith(
+        mockProps.address,
+        '1000',
+        mockDataCap,
+      );
 
       const successHeader = await screen.findByTestId('success-header');
       expect(successHeader).toHaveTextContent('Success!');
@@ -125,7 +131,7 @@ describe('RkhSignTransactionDialog Integration Tests', () => {
       await user.click(screen.getByRole('radio', { name: /set/i }));
       await user.click(screen.getByRole('button', { name: /approve/i }));
 
-      expect(mocks.mockProposeAddVerifier).toHaveBeenCalledWith(mockProps.address, 1000);
+      expect(mocks.mockProposeAddVerifier).toHaveBeenCalledWith(mockProps.address, '1000');
 
       const successHeader = await screen.findByTestId('success-header');
       expect(successHeader).toHaveTextContent('Success!');

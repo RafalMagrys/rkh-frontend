@@ -2,11 +2,7 @@ import { useContext } from 'react';
 import { AccountContext } from '@/contexts/AccountContext';
 import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 
-/**
- * Custom hook to access the account role.
- * @returns Account role.
- */
-type VerifierDataCap = { datacap: number; verifier: string };
+type VerifierDataCap = { datacap: bigint; verifier: string };
 
 export function useGetVerifierDataCap(
   actorId: string,
